@@ -2,7 +2,7 @@
 #include <iostream>
 #include <random>
 #include <limits>
-
+using namespace std;
 class Game{
   private: // Can be accessed only in the class
     int min;
@@ -14,7 +14,7 @@ class Game{
     int score;
     bool success;
 
-    std::mt19937 gen;
+    mt19937 gen;
 
   public: // Can be accessed outside the class
     Game()
@@ -25,40 +25,44 @@ class Game{
       rounds_played(0),
       score(0),
       success(false),
-      gen(std::random_device{}())
+      gen(random_device{}())
     {};
 
     void select_range(){
       do {
-        std::cout << "Select the min range \n";
-        std::cin >> min;
-      
-        while(std::cin.fail()){
-          std::cin.clear();
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          std::cout << "Select the min range \n";
-          std::cin >> min;
+        cout << "*************************Guessing Game*************************" << endl;
+        cout << "Try your luck today" << endl;
+        cout << "Guess a random number between a range of your choice" << endl;
+        cout << "Select the min number \n";
+        cin >> min;
+
+        while(cin.fail()){
+          cin.clear();
+          cin.ignore(numeric_limits<streamsize>::max(), '\n');
+          cout << "Please select a number" << endl;
+          cout << "Select the min number \n";
+          cin >> min;
         };
-      
-        std::cout << "Select the max range \n";
-        std::cin >> max;
-      
-        while(std::cin.fail()){
-          std::cin.clear();
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          std::cout << "Select the max range \n";
-          std::cin >> max;
+
+        cout << "Select the max number \n";
+        cin >> max;
+
+        while(cin.fail()){
+          cin.clear();
+          cin.ignore(numeric_limits<streamsize>::max(), '\n');
+          cout << "Select the max number \n";
+          cin >> max;
         };
 
         if (max < min){
-          std::cout << "Max cannot be less than the min \n";
+          cout << "Max cannot be less than the min \n";
         }
-    
+
       }while (max < min);
     }
 
     void generate_secret(){
-      std::uniform_int_distribution<> dist(min, max);
+      uniform_int_distribution<> dist(min, max);
       secret = dist(gen);
     }
 
@@ -69,17 +73,17 @@ class Game{
       generate_secret();
 
       int guess;
-    
+
 
       while(attempt_count < max_attempts && !success){
-        std::cout << "\nEnter a number between " << min << " and " << max << ": \n ";
-        std::cin >> guess;
+        cout << "\nEnter a number from " << min << " to " << max << ": \n ";
+        cin >> guess;
 
-        while (std::cin.fail()) {
-          std::cout << "Retry, but type an integer this time 🥲 \n ";
-          std::cin.clear();
-          std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-          std::cin >> guess;
+        while (cin.fail()) {
+          cout << "Retry, but type an integer this time 🥲 \n ";
+          cin.clear();
+          cin.ignore(numeric_limits<streamsize>::max(), '\n');
+          cin >> guess;
           continue;
         };
 
@@ -88,23 +92,23 @@ class Game{
         if(secret == guess){
           success = true;
           score+=(max_attempts - attempt_count + 1) * 10;
-          std::cout << "Congrats, you had it 👏👏 \n";
+          cout << "Congrats, you had it 👏👏 \n";
         }
         else if (secret > guess){
-          std::cout << "Guess higher 😁 \n";
-          
+          cout << "Guess higher 😁 \n";
+
         } else if (secret < guess){
-          std::cout << "Guess lower 😁 \n";
-          
+          cout << "Guess lower 😁 \n";
+
         } else {
-          std::cout << "None of the win/loss sequence conditions were met";//debug
+          cout << "None of the win/loss sequence conditions were met";//debug
         }
-        std::cout << "You have " << max_attempts-attempt_count << " tries left \n";
-      
+        cout << "You have " << max_attempts-attempt_count << " tries left \n";
+
         if (attempt_count == max_attempts && !success){
-          std::cout << "You have tried "<< max_attempts << " times 🖐🏻 \n " << "The number was \n" << secret << "\n";
+          cout << "You have tried "<< max_attempts << " times 🖐🏻 \n " << "The number was \n" << secret << "\n";
         } else if(attempt_count == max_attempts && success){
-          std::cout << "You lucky mangle 🤣🤣, got it on your last try";
+          cout << "You lucky mangle 🤣🤣, got it on your last try";
         }
       }
     }
@@ -112,27 +116,17 @@ class Game{
     void start(){
       select_range();
       char choice;
-      char changeRangeCOnfirmation;
 
       do{
         play_round();
-        std::cout << "Play again? (y/n)";
-        std::cin >> choice;
-        std::cout << "Use the same range as before? \n (y/n) \n";
-        std::cin >> changeRangeCOnfirmation;
-        if (changeRangeCOnfirmation == 'n'){
-          select_range();
-        }
+        cout << "Play again? (y/n)";
+        cin >> choice;
 
       } while(choice == 'y');
 
-      std::cout << "\n Game Over \n";
-      std::cout << "Rounds played: " << rounds_played << "\n";
-      std::cout << "Final score: " << score << "\n";
-    }
-
-    void changeRangeAndPlay(){
-
+      cout << "\n Game Over \n";
+      cout << "Rounds played: " << rounds_played << "\n";
+      cout << "Final score: " << score << "\n";
     }
   };
 
